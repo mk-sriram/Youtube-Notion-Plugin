@@ -1,25 +1,24 @@
 .container {
-  width: 280px;
-  color: #314d3e;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  width: 250%;
+  height: 150%;
+  align-items: center;
 }
 
-
-.title {
-  font-size: 15px;
-  font-weight: bold;
-  padding: 8px;
-  text-align: center;
+.form-group {
+  margin-bottom: 5px;
 }
 
-.textbox {
-  width: 100%;
+.form-control {
+  padding: 4px 8px;
   font-size: 12px;
-  margin: 0;
-  padding: 0px 2px;
+  min-height: 10px;
+  min-width: 300px;
 }
 
-.bookmarks {
-  margin: 5px 5px;
-  padding: 3px;
+.btn-primary {
+  position: relative;
+  
+  font-size: 14px;
 }
-

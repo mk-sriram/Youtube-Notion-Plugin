@@ -3,6 +3,13 @@
     let currentVideo = "";
     let currentVideoBookmarks = [];
 
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+        if (message.type === 'CONFIG') {
+          var databaseId = message.data.databaseId;
+          var apiToken = message.data.apiToken;
+        }
+      });
+    
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, value, videoId } = obj;
 
@@ -46,8 +53,10 @@
 
     // } ( to update the icon )
     const addToNotion = () => {
-        
+        const videoUrl = window.location.href;
+
     };
+
     newVideoLoaded();
 })();
 
