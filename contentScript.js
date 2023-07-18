@@ -12,7 +12,7 @@
         }
     });
 
-    const newVideoLoaded =() => {
+    const newVideoLoaded = async () => {
         //checking if a bookmark button alrady exists 
         //check if the logo is a specific file, if not then add a bookmark button ( instead of checking notion )
         const bBtnExists = document.getElementsByClassName("bookmark-btn")[0];
@@ -21,12 +21,33 @@
             const bookmarkbtn = document.createElement("img");
 
             //adding the bookmark styling 
-            bookmarkbtn.src = chrome.runtime.getURL("assests/bookmark.png");
-            bookmarkbtn.className = "ytp-button" + "bookmark-btn";
+            bookmarkbtn.src = chrome.runtime.getURL("assets/bookmark.png");
+            bookmarkbtn.className = "ytp-button" + " bookmark-btn";
             bookmarkbtn.title = "Click to add to notion";
 
+            bookmarkbtn.style.width = "35px";
+            bookmarkbtn.style.height = "35px";
+            bookmarkbtn.style.display = "block";
+            bookmarkbtn.style.position = "relative";
+            bookmarkbtn.style.top = "50%";
+            bookmarkbtn.style.transform = "translateY(-50%)";
+            bookmarkbtn.style.marginRight = "10px";
+            
+            youtubeLeftControls = document.getElementsByClassName("ytp-left-controls")[0];
+            youtubePlayer = document.getElementsByClassName('video-stream')[0];
+
+            youtubeLeftControls.appendChild(bookmarkbtn);
+            bookmarkbtn.addEventListener("click", addToNotion);
+            //bookmarkbtn.addEventListener("click", bookmarkclicked); ( to update the icon)
+
         }
-    }
-   
+    };
+    // const bookmarkclicked = () => {
+
+    // } ( to update the icon )
+    const addToNotion = () => {
+        
+    };
+    newVideoLoaded();
 })();
 

@@ -1,5 +1,6 @@
 chrome.tabs.onUpdated.addListener((tabId, tab) => { //checking if the tab is a youtube link 
     if (tab.url && tab.url.includes("youtube.com/watch")) {
+      var videoUrl = tab.url;
       const queryParameters = tab.url.split("?")[1]; //spliting the url to get the ID 
       const urlParameters = new URLSearchParams(queryParameters);
       
