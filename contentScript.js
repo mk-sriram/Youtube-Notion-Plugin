@@ -52,60 +52,62 @@
         }
     };
     // const bookmarkclicked = () => {
-
+    const { Client } = require('@notionhq/client');
     // } ( to update the icon )
-    const addToNotion = () => { //creates a function using arrow function syntax
-        const videoUrl = window.location.href; // this retrieves the current URL of the Youtube Video
+    const addToNotion = async() => { //creates a function using arrow function syntax
+        const videoUrl = youtubePlayer.getURL(); // this retrieves the current URL of the Youtube Video
+        const videoTitle = youtubePlayer.getVideodData().title;
 
         // Replace with your own Notion API credentials and database information
         const notionApiUrl = "https://api.notion.com/v1/pages";
         const notionDatabaseId = databaseId;
         const notionApiToken = apiToken;
 
-        // Prepare the request payload
-        const requestBody = { //this is an object representitng the payload for the POST request to the Notion API 
+        const notion = new Client({ auth: notionApiToken });
+
+        try {
+            // Create a new page in the specified database
+            const response = await notion.pages.create({
             parent: {
-             database_id: notionDatabaseId,
+                database_id: notionDatabaseId,
             },
-                properties: {
-                        title: {
-                            title: [
-                            {
-                                text: {
-                                content: "YouTube Video",
-                                },
-                            },
-                            ],
-                        },
-                        url: {
-                            url: videoUrl,
-                        },
+            properties: {
+                Name: {
+                title: [
+                    {
+                    text: {
+                        content: videoTitle,
+                    },
+                    },
+                ],
                 },
-            };
-
-        // Send POST request to the Notion API
-            fetch(notionApiUrl, { //Fetch function is used to send a POST request to the Notion API using the Notion API URL 
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${notionApiToken}`,
+                URL: {
+                rich_text: [
+                    {
+                    text: {
+                        content: youtubeUrl,
+                        link: { url: videoUrl },
+                    },
+                    },
+                ],
                 },
-                body: JSON.stringify(requestBody),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                console.log("Video URL added to Notion:", data);
-                })
-                .catch((error) => {
-                    if (databaseId == null || apiToken == null){
-                        console.error("Missing Notion API credentials", error);
-                    }
-                    else{
-                        console.error("Error adding video URL to Notion:", error);
-                    }
-                });
+            },
+            });
 
-                };
+            console.log('New Notion page created:', response);
+        } catch (error) {
+            if (databaseId == null || apiToken == null){
+                console.error("Missing Notion API credentials", error);
+            }
+            else{
+                console.error("Error adding video URL to Notion:", error);
+            }
+            
+        }
+
+    };
+
+
 
     newVideoLoaded();
 })();
