@@ -21,15 +21,31 @@
 </div>
 <script>
   document.getElementById('configForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+    //getelementybyID uses the "configform" ID to get the form element
+    //addeventlister, listens to the button click using (submit ID) and launches the function
+    //the {} has the stuff thhat the function is supposed to do
+
+    // you could just externalize the function by calling it a different name and have a 
+    //function outside with the code below
+
+    event.preventDefault(); //this prevents the code from refreshing the page or redirecting
+    //which is the default behavior of a form submission. this aloows us to use custom Javascript code 
+    //instead of allowing the form to preforrm its default action. 
+
+    /*here the "event" inside function(event) to receive the event objet as a parameter in 
+    the event listener callback function
+    
+    why defining the parameter event, we're able to utilize the event object within the function
+    here we're able to call ,  "event.preventDefault()" using the object */
 
     // Get form field values
     var databaseId = document.getElementById('databaseId').value;
     var apiToken = document.getElementById('apiToken').value;
 
     // Create message object with form data
+
     var message = {
-      type: 'CONFIG',
+      type: 'INFOMSG', //helps us to identify the msg from contentScript.js 
       data: {
         databaseId: databaseId,
         apiToken: apiToken
@@ -40,6 +56,10 @@
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, message);
     });
+    /* this line queries the active tab in the current window using Chrome.tabs.query 
+    active and currentWindow are true, to take the tab in the currentwindow that active
+    then the function is annoymous, receives the result of the query, which is an arry of active tabs 
+    chrome.tabs.sendMessage() -> sends the message to the current tab, .id gets its id */
 
     // Reset form fields
     document.getElementById('databaseId').value = '';

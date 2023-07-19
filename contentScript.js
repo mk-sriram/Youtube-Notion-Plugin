@@ -2,9 +2,11 @@
     let youtubeLeftControls, youtubePlayer; //manipulating the youtube video page ( DOM )
     let currentVideo = "";
     let currentVideoBookmarks = [];
+    var databaseId = null; 
+    var apiToken = null; 
 
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-        if (message.type === 'CONFIG') {
+        if (message.type === 'INFOMSG') {
           var databaseId = message.data.databaseId;
           var apiToken = message.data.apiToken;
         }
@@ -52,10 +54,58 @@
     // const bookmarkclicked = () => {
 
     // } ( to update the icon )
-    const addToNotion = () => {
-        const videoUrl = window.location.href;
+    const addToNotion = () => { //creates a function using arrow function syntax
+        const videoUrl = window.location.href; // this retrieves the current URL of the Youtube Video
 
-    };
+        // Replace with your own Notion API credentials and database information
+        const notionApiUrl = "https://api.notion.com/v1/pages";
+        const notionDatabaseId = databaseId;
+        const notionApiToken = apiToken;
+
+        // Prepare the request payload
+        const requestBody = { //this is an object representitng the payload for the POST request to the Notion API 
+            parent: {
+             database_id: notionDatabaseId,
+            },
+                properties: {
+                        title: {
+                            title: [
+                            {
+                                text: {
+                                content: "YouTube Video",
+                                },
+                            },
+                            ],
+                        },
+                        url: {
+                            url: videoUrl,
+                        },
+                },
+            };
+
+        // Send POST request to the Notion API
+            fetch(notionApiUrl, { //Fetch function is used to send a POST request to the Notion API using the Notion API URL 
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${notionApiToken}`,
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                console.log("Video URL added to Notion:", data);
+                })
+                .catch((error) => {
+                    if (databaseId == null || apiToken == null){
+                        console.error("Missing Notion API credentials", error);
+                    }
+                    else{
+                        console.error("Error adding video URL to Notion:", error);
+                    }
+                });
+
+                };
 
     newVideoLoaded();
 })();
