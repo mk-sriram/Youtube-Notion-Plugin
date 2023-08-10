@@ -4,13 +4,14 @@
     let currentVideoBookmarks = [];
     var databaseId = null; 
     var apiToken = null; 
+    const { Client } = require('@notionhq/client');
 
-    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-        if (message.type === 'INFOMSG') {
-          var databaseId = message.data.databaseId;
-          var apiToken = message.data.apiToken;
-        }
-      });
+    // chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    //     if (message.type === 'INFOMSG') {
+    //       var databaseId = message.data.databaseId;
+    //       var apiToken = message.data.apiToken;
+    //     }
+    //   });
     
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, value, videoId } = obj;
@@ -51,17 +52,19 @@
 
         }
     };
-    // const bookmarkclicked = () => {
-    const { Client } = require('@notionhq/client');
-    // } ( to update the icon )
+
+    
+   
     const addToNotion = async() => { //creates a function using arrow function syntax
         const videoUrl = youtubePlayer.getURL(); // this retrieves the current URL of the Youtube Video
         const videoTitle = youtubePlayer.getVideodData().title;
 
         // Replace with your own Notion API credentials and database information
         const notionApiUrl = "https://api.notion.com/v1/pages";
-        const notionDatabaseId = databaseId;
-        const notionApiToken = apiToken;
+        // const notionDatabaseId = databaseId;
+        // const notionApiToken = apiToken;
+        const notionDatabaseId = "643d5887a64d4d78bf4a0dc619f0bb81";
+        const notionApiToken = "secret_9Y9GYULiViTgBzJXJnZ98D7PF4OrwrknMKuo8d18L0m";
 
         const notion = new Client({ auth: notionApiToken });
 
@@ -85,7 +88,7 @@
                 rich_text: [
                     {
                     text: {
-                        content: youtubeUrl,
+                        content: videoUrl,
                         link: { url: videoUrl },
                     },
                     },
